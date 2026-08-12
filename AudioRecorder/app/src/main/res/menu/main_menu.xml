@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_search"
+        android:title="جستجو"
+        android:icon="@android:drawable/ic_menu_search"
+        app:showAsAction="ifRoom|collapseActionView"
+        app:actionViewClass="androidx.appcompat.widget.SearchView" />
+
+    <item
+        android:id="@+id/action_sort_menu"
+        android:title="مرتب‌سازی"
+        android:icon="@android:drawable/ic_menu_sort_by_size"
+        app:showAsAction="ifRoom">
+        <menu>
+            <item android:id="@+id/action_sort_date" android:title="تاریخ (جدیدترین)" />
+            <item android:id="@+id/action_sort_name" android:title="نام" />
+            <item android:id="@+id/action_sort_duration" android:title="مدت زمان" />
+            <item android:id="@+id/action_sort_size" android:title="حجم فایل" />
+        </menu>
+    </item>
+
+    <item
+        android:id="@+id/action_battery"
+        android:title="غیرفعال کردن بهینه‌سازی باتری"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_settings"
+        android:title="تنظیمات"
+        android:icon="@android:drawable/ic_menu_manage"
+        app:showAsAction="ifRoom" />
+
+</menu>
