@@ -1,0 +1,4 @@
+-keep class com.example.audiorecorder.RecordingEntity { <init>(...); }
+-keepclassmembers class com.example.audiorecorder.RecordingDao { <methods>; }
+-keepclassmembers class com.example.audiorecorder.RecordingDatabase { <methods>; }
+-dontwarn kotlinx.coroutines.**
