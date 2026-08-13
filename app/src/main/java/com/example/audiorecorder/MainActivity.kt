@@ -398,8 +398,7 @@ class MainActivity : AppCompatActivity() {
                     TimeUnit.MILLISECONDS.toSeconds(ms) % 60
                 )
                 "${index + 1}. $time"
-            }.joinToString("
-")
+            }.joinToString("\n")
         }
         AlertDialog.Builder(this)
             .setTitle("🔖 علامت‌های ${item.displayName}")
