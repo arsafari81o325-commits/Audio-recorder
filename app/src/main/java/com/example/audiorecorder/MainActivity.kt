@@ -63,13 +63,19 @@ class MainActivity : AppCompatActivity() {
             pendingProjectionData = result.data
             checkNotificationAndStartService()
         } else {
-            Toast.makeText(this, "مجوز ضبط صفحه لازم است", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                this,
+                "مجوز ضبط صفحه لازم است (کد: ${result.resultCode}, data: ${result.data})",
+                Toast.LENGTH_LONG
+            ).show()
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        showLastCrashIfAny()
 
         repository = (application as AudioRecorderApp).repository
         preferences = (application as AudioRecorderApp).preferences
@@ -444,5 +450,21 @@ class MainActivity : AppCompatActivity() {
         abandonAudioFocus()
         mediaPlayer?.release()
         mediaPlayer = null
+    }
+
+    private fun showLastCrashIfAny() {
+        try {
+            val crashFile = java.io.File(getExternalFilesDir(null), "last_crash.txt")
+            if (crashFile.exists()) {
+                val text = crashFile.readText()
+                AlertDialog.Builder(this)
+                    .setTitle("گزارش خطای اجرای قبلی")
+                    .setMessage(text)
+                    .setPositiveButton("باشه") { _, _ -> crashFile.delete() }
+                    .setNegativeButton("پاک نکن", null)
+                    .show()
+            }
+        } catch (_: Exception) {
+        }
     }
 }
