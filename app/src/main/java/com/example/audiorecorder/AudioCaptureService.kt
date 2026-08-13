@@ -64,15 +64,25 @@ class AudioCaptureService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         when (intent?.action) {
             ACTION_START -> {
+                // CRITICAL FIX: startForeground() must be called immediately,
+                // before any other logic, whenever this service is launched
+                // via startForegroundService(). Doing state/validity checks
+                // first (and possibly returning early) risks the system
+                // killing the app with ForegroundServiceDidNotStartInTimeException
+                // if 5 seconds pass without startForeground() being called.
+                val initNotification = notificationHelper!!.buildInitializingNotification()
+                startForeground(NotificationHelper.NOTIFICATION_ID, initNotification)
+
                 if (session.state.value != RecordingSessionState.Idle) {
-                    Log.w(TAG, "Start requested but state is ${session.state.value}, ignoring")
+                    Log.w(TAG, "Start requested but state is ${session.state.value}, resetting and ignoring")
+                    session.setIdle()
+                    stopForeground(STOP_FOREGROUND_REMOVE)
+                    stopSelf()
                     return START_NOT_STICKY
                 }
                 val resultCode = intent.getIntExtra(EXTRA_RESULT_CODE, -1)
                 val data = intent.getParcelableExtra<Intent>(EXTRA_DATA)
                 if (resultCode != -1 && data != null) {
-                    val initNotification = notificationHelper!!.buildInitializingNotification()
-                    startForeground(NotificationHelper.NOTIFICATION_ID, initNotification)
                     startRecordingSafely(resultCode, data)
                 } else {
                     session.setError(RecordingError.ProjectionDenied)
